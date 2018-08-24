@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#cav{
+				border:1px solid black;
+				border-radius: 5px;
+			}
+			#code{
+				width: 200px;
+				height: 40px;
+				float:left;
+				margin-right:10px;
+			}
+		</style>
+	</head>
+	<body>
+		<input type="text" id="code" placeholder="请输入验证码(不区分大小写)" maxlength="4"/>
+		<canvas id="cav" width="120px" height="40">
+			你的浏览器不支持canvas，请升级
+		</canvas>
+		<br />
+		<button id="btn">提交</button>
+		<script type="text/javascript">
+			var cav = document.getElementById("cav");
+			var btn = document.getElementById("btn");
+			var code = document.getElementById("code");
+			getFn();
+			cav.onclick  = getFn;
+			function getFn(){
+            	function rn(min,max){
+	                return  parseInt(Math.random()*(max-min)+min);
+	            }
+            	var w=120;
+	            var h=40;
+	            var ctx=cav.getContext("2d");
+	            ctx.fillStyle="white";
+	            ctx.fillRect(0,0,w,h);
+	            
+	            var pool="ABCDEFGHIJKLIMNOPQRSTUVWSYZabcdefghijklmnopqrstuvwxyz1234567890";
+	            var str = "",c;
+	            for(var i=0;i<4;i++){
+	                c =pool[rn(0,pool.length)];
+	                var fs=rn(18,40);
+	                var deg=rn(-30,30);
+//	                console.log(fs);
+	                ctx.font=fs+'px Simhei';
+	                ctx.textBaseline="top";
+	                ctx.fillStyle="rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")";
+	                ctx.save();
+	                ctx.translate(30*i+15,15);
+	                ctx.rotate(deg*Math.PI/180);
+	                ctx.fillText(c,-10,-15);
+	                 str += c;
+	                ctx.restore();
+	               
+//	                console.log(str);
+	            }
+	            cav.innerText = str;
+	            console.log(cav.innerText);
+	            for(var i=0;i<5;i++){
+	                ctx.beginPath();
+	                ctx.moveTo(rn(0,w),rn(0,h));
+	                ctx.lineTo(rn(0,w),rn(0,h));
+	                ctx.strokeStyle="rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")";
+	                ctx.closePath();
+	                ctx.stroke();
+	            }
+	           
+	            for(var i=0;i<30;i++){
+	                ctx.beginPath();
+	                ctx.arc(rn(0,w),rn(0,h),1,0,2*Math.PI);
+	                ctx.closePath();
+	                ctx.fillStyle="rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")";
+	                ctx.fill();
+	            }
+            }
+			
+			btn.onclick = function(){
+            	var val = code.value.toUpperCase();
+//          	console.log();
+            	
+            	if(code.value.length == 0){
+					alert("请输入验证码");
+				}else if(val == c.toUpperCase()){
+					getFn();
+					alert("验证通过");
+					code.value = "";
+				}else{
+					alert("请输入正确的验证码");
+				}
+	        }	
+	        		
+			            
+			            
+			            
+			            
+                
+	            
+	          
+	            
+			
+		</script>
+	</body>
+</html>
+
+
+
