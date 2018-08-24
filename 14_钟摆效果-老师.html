@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		div{
+			width: 50px;
+			height: 50px;
+			background-color: red;
+			border-radius: 50%;
+			position: relative;
+			left:50px;
+			top:50px;
+			float: left;
+		}
+		.box1{
+			top:50px;
+			animation: peng 1s linear 0s infinite alternate forwards;
+		}
+		@-webkit-keyframes peng{
+			0%{
+				left:0px;
+				top:25px;
+			}
+			50%{
+				left:50px;
+				top:50px;
+			}
+			100%{
+				left:50px;
+				top:50px;
+			}
+		}
+		.line{
+			width: 2px;
+			height: 80px;
+			background-color: pink;
+			border-radius: 0px;
+			position: absolute;
+			left:25px;
+			top:-80px;
+		}
+		.box2{
+			top:60px;
+		}
+		.box3{
+			top:70px;
+		}
+		.box4{
+			top:60px;
+		}
+		.box5{
+			top:50px;
+			animation: peng1 1s linear 0s infinite alternate forwards;
+		}
+		@-webkit-keyframes peng1{
+			0%{
+				left:50px;
+				top:50px;
+			}
+			50%{
+				left:50px;
+				top:50px;
+			}
+			100%{
+				left:75px;
+				top:25px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="box1">
+		<div class="line"></div>
+	</div>
+	<div class="box2"></div>
+	<div class="box3"></div>
+	<div class="box4"></div>
+	<div class="box5">
+		<div class="line"></div>
+	</div>
+</body>
+</html>
