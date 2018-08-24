@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>腾讯微博</title>
+	<style>
+		.user input{
+			border-radius: 5px;
+		}
+		.user img{
+			width: 40px;
+		}
+		textarea{
+			border-radius: 5px;
+		}
+		.submit{
+			font-size: 12px;
+			color: gray;
+		}
+		.submit span{
+			font-size: 24px;
+		}
+		.submit input{
+			width: 115px;
+			height: 30px;
+			background-color: #86c31f;
+			font-size: 18px;
+			color: #fff;
+			border-radius: 5px;
+		}
+		.user img{
+			opacity: .3;
+		}
+		.user .active{
+			opacity: 1;
+		}
+		#ping{
+			width: 480px;
+		}
+		#ping>div:nth-child(1){
+			width: 100%;
+			height: 35px;
+			line-height: 35px;
+			background-color: #e3eaec;
+		}
+		#ping>div:nth-child(1) span{
+			display: block;
+			background-color: #fff;
+			width: 85px;
+			height: 30px;
+			padding-bottom:5px;
+			margin-left: 10px;
+			text-align: center;
+		}
+		#content ul{
+			list-style: none;
+		}
+		#content ul li{
+			display: flex;
+			border-bottom: 1px dashed #000;
+			margin-bottom: 10px;
+		}
+		#content ul li>div:nth-child(1){
+			margin-right: 5px;
+		}
+		#content ul li img{
+			width: 50px;
+			height: 50px;
+			border-radius: 2px;
+		}
+		#content ul li .mz{
+			color: #a0a0e4;
+		}
+		#content ul li .time{
+			font-size: 12px;
+		}
+		#content ul li p{
+			width: 100%;
+		}
+		#content ul li p a{
+			float: right;
+			/*display: none;*/
+		}
+		/*#content ul li:hover p a{
+			display: inline-block;
+		}*/
+	</style>
+	<script type="text/javascript" src="jquery-1.8.3.min.js"></script>
+</head>
+<body>
+	<h3>来，说说你在做什么，想什么</h3>
+	<form method="post">
+		<div class="user">
+			用户名：<input type="text" name="user" id="user">
+			<img src="img/(1).jpg" alt="" class='active'>
+			<img src="img/(2).jpg" alt="">
+			<img src="img/(3).jpg" alt="">
+			<img src="img/(4).jpg" alt="">
+			<img src="img/(5).jpg" alt="">
+			<img src="img/(6).jpg" alt="">
+			<img src="img/(7).jpg" alt="">
+			<img src="img/(8).jpg" alt="">
+		</div>
+		<div>
+			内容：<br>
+			<textarea name="text" cols="40" rows="4" id="text"></textarea>	
+		</div>
+		<div class='submit'>
+			还能输入<span id="sheng">140</span>个字
+			<input type="button" value="广播" id="btn">
+			(可按Ctrl+Enter回复)
+		</div>
+	</form>
+	<div id="ping">
+		<div>
+			<span>大家在说</span>
+		</div>
+		<div id="content">
+			<ul></ul>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			function WbFn(){
+				this.init();
+			}
+			WbFn.prototype = {
+				init:function(){
+					this.imgsrc = "http://127.0.0.1/xia/8.22-王慧斌机试/img/(1).jpg";
+					this.changeImg();
+					this.Release();
+					this.search();
+					this.Shu();
+				},
+				// 更改头像  
+				changeImg:function(){
+					var self = this;
+					//图片点击
+					$('.user img').on('click',function(){
+						//透明度判断点击的哪个
+						$(this).addClass('active').siblings('img').removeClass('active');
+//						获取图片路径  需要在将图片路径提交到数据库中
+						self.imgsrc = $(this)[0].src;
+						console.log($(this)[0]);
+					})
+				},
+				// 发布微博
+				Release:function(){
+					var self = this;
+					$("#btn").on('click',function(){
+						self.fabu();
+					})
+				},
+				// 打开网页自动查询有无数据并在评论区显示评论
+				search:function(){
+					// $('#content ul').empty();
+					//刚打开页面去请求数据库里的数据，如果有就直接返回到页面中
+					//到search.php中查询数据
+					//在这块的添加数据类似json中的添加 
+					//在php通过数据库请求到的data数据进行添加
+					$.post("http://127.0.0.1/xia/8.22-王慧斌机试/search.php",function(data){
+						$('#content ul').html(data);
+						// 添加删除功能
+						$('#content ul li p a').on('click',function(){
+							// 以名字作为查找元素进行删除
+							console.log($(this));
+							var name = $(this).parent().siblings().eq(0).html();
+//							console.log($(this).parent().parent().parent());
+							$(this).parent().parent().parent().remove();
+							$.post("http://127.0.0.1/xia/8.22-王慧斌机试/delete.php",({
+								//username:变量名
+								//name:变量值
+								"name":name
+							}),function(data){
+//								 alert(data);
+							})
+						})
+					})
+				},
+				// 判断输入字数及Ctrl+enter回复
+				Shu:function(){
+					var self = this;
+					$('html').on('keyup',function(e){
+						var e = e||window.event;
+						$('#sheng').html(140-$('#text').val().length);
+						if (e.ctrlKey&&e.keyCode==13) {
+							self.fabu();
+							console.log('你好');
+						}
+					})
+				},
+				fabu:function(){
+					var self = this;
+					var user = $('#user').val();
+					var text = $('#text').val();
+					if (user==""||text==""){
+						alert('用户名/内容不能为空');
+						return;
+					}
+					$.post("http://127.0.0.1/xia/8.22-王慧斌机试/login.php",({
+						"user":user,
+						"text":text,
+						"imgsrc":self.imgsrc,
+					}),function(data){
+						self.search();
+					})
+				}
+			}
+			new WbFn();
+		})
+	</script>
+</body>
+</html>
